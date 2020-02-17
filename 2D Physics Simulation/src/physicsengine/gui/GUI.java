@@ -38,7 +38,7 @@ public class GUI extends JFrame implements MouseListener
 	public static Ball getNewBall()
 	{
 		Point pos = new Point(760, 100);
-		Vector velocity = new Vector(900, 300);
+		Vector velocity = new Vector(0, 0);
 		Vector netforce = new Vector(0, 0);
 		double mass = 10.0;
 		double radius = 30.0;
