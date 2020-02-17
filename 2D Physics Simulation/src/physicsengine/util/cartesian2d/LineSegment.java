@@ -46,13 +46,13 @@ public class LineSegment extends Line
 		return closest;
 	}
 	
-//	public void render(Graphics g)
-//	{
-//		int x1 = (int) a.x;
-//		int y1 = (int) (461 - a.y);
-//		int x2 = (int) b.x;
-//		int y2 = (int) (461 - b.y);
-//		g.drawLine(x1, y1, x2, y2);
-//	}
+	public void render(Graphics g)
+	{
+		int x1 = (int) a.x;
+		int y1 = (int) (461 - a.y);
+		int x2 = (int) b.x;
+		int y2 = (int) (461 - b.y);
+		g.drawLine(x1, y1, x2, y2);
+	}
 
 }

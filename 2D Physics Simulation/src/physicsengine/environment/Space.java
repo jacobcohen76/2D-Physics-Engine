@@ -1,6 +1,5 @@
 package physicsengine.environment;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -99,10 +98,5 @@ public class Space implements Runnable
 					Collisions.collide(ball, ball2);
 			}
 		}
-	}
-	
-	private void runInfiniteLoop() throws InterruptedException
-	{
-		
 	}
 }
