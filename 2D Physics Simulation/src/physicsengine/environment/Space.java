@@ -26,12 +26,12 @@ public class Space implements Runnable
 		this.tickspeed = tickspeed;
 	}
 	
-	public boolean add(Ball toAdd)
+	public synchronized boolean add(Ball toAdd)
 	{
 		return ballsToAdd.add(toAdd);
 	}
 	
-	public boolean add(Wall toAdd)
+	public synchronized boolean add(Wall toAdd)
 	{
 		return wallsToAdd.add(toAdd);
 	}
