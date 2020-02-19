@@ -27,6 +27,6 @@ public class Ball extends Object
 		int y = Global.getY((int) (pos.y + radius));
 		int diameter = (int) (radius * 2);
 		g.fillOval(x, y, diameter, diameter);
-//		velocity.render(g, pos);
+		velocity.render(g, pos);
 	}
 }

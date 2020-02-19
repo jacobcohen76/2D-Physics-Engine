@@ -36,44 +36,48 @@ public class Space implements Runnable
 		return wallsToAdd.add(toAdd);
 	}
 	
-	private void tick(double time)
+	private synchronized void tick(double time)
 	{
 		for(Ball ball : balls)
 			ball.tick(time);
 	}
 	
-	private Queue<Ball> ballsToAdd = new LinkedList<Ball>();
-	private Queue<Wall> wallsToAdd = new LinkedList<Wall>();
+	private volatile Queue<Ball> ballsToAdd = new LinkedList<Ball>();
+	private volatile Queue<Wall> wallsToAdd = new LinkedList<Wall>();
+	private volatile Queue<Object> toRender = new LinkedList<Object>();
+	
+	private synchronized void updateObjects()
+	{
+		balls.addAll(ballsToAdd);
+		walls.addAll(wallsToAdd);
+		toRender.addAll(ballsToAdd);
+		toRender.addAll(wallsToAdd);
+		ballsToAdd.clear();
+		wallsToAdd.clear();
+	}
 	
 	public void run()
 	{
 		try {
 			double seconds = (double)tickspeed / 1000.0;
-			Queue<Object> toRender = new LinkedList<Object>();
 			while(true)
 			{
-				balls.addAll(ballsToAdd);
-				walls.addAll(wallsToAdd);
-				ballsToAdd.clear();
-				wallsToAdd.clear();
-				
-				toRender.addAll(balls);
-				toRender.addAll(walls);
+				updateObjects();
 				display.render(toRender);
-				toRender.clear();
 				Thread.sleep(tickspeed);
-				tick(seconds);
 				computeCollisions();
+				tick(seconds);
 			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void clear()
+	public synchronized void clear()
 	{
 		balls.clear();
 		walls.clear();
+		toRender.clear();
 	}
 	
 	private void computeCollisions()
