@@ -64,8 +64,8 @@ public class Space implements Runnable
 			{
 				updateObjects();
 				display.render(toRender);
-				Thread.sleep(tickspeed);
 				computeCollisions();
+				Thread.sleep(tickspeed);
 				tick(seconds);
 			}
 		} catch (InterruptedException e) {

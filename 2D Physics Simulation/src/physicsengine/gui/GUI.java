@@ -17,9 +17,13 @@ import physicsengine.util.cartesian2d.Vector;
 public class GUI extends JFrame implements MouseListener
 {
 	private static final long serialVersionUID = -6317281367173512812L;
+	private static final Vector GRAVITY = new Vector(0, -10000.0);
+	private static final Random rand = new Random(System.currentTimeMillis());
 	
 	private static final int DEFAULT_WIDTH = 1000;
 	private static final int DEFAULT_HEIGHT = 1000;
+	
+	public Space space;
 	
 	private Display display;
 	
@@ -33,6 +37,7 @@ public class GUI extends JFrame implements MouseListener
 		this.add(display);
 		space = new Space(1L, display);
 		this.getContentPane().addMouseListener(this);
+		this.setVisible(true);
 	}
 	
 	public static Ball getNewBall()
@@ -46,87 +51,27 @@ public class GUI extends JFrame implements MouseListener
 		return new Ball(pos, velocity, netforce, mass, radius, color);
 	}
 	
-	private static final Vector GRAVITY = new Vector(0, -10000.0);
 	public static void addGravity(Ball ball)
 	{
 		ball.addForce(Vector.mult(ball.mass, GRAVITY));
 	}
-	
-	public Space space;
-	
-	private static Random rand = new Random(System.currentTimeMillis());
 	
 	public static Color randomColor()
 	{
 		return new Color(rand.nextInt(16777216));
 	}
 	
-	public void init()
+	public void run()
 	{
-		
-//		Ball ball = getNewBall();
-//		addGravity(ball);
-//		ball.mass = 40;
-//		ball.radius = 28.0;
-//		ball.pos.x = 500;
-//		ball.pos.y = 100;
-////		space.add(ball);
-//		
-//		
-//		Ball lead = getNewBall();
-//		lead.radius = 15;
-//		lead.color = Color.GRAY;
-//		lead.pos.x = 840;
-//		lead.pos.y = 73;
-//		lead.mass = 100;
-//		lead.velocity = new Vector(0, 0);
-//		addGravity(lead);
-////		space.add(lead);
-//		
-//		Ball ball2 = getNewBall();
-//		ball2.color = Color.GREEN;
-//		ball2.mass = 20.0;
-//		ball2.radius = 50;
-//		ball2.mass = 100;
-//		addGravity(ball2);
-//		
-//		space.add(ball2);
-//		
-//		int north = 200;
-//		int east = 1500;
-//		int south = -500;
-//		int west = 300;
-//		
-//		Wall NORTH = new Wall(new LineSegment(new Point(west, north), new Point(east, north)), Color.RED);
-//		Wall EAST = new Wall(new LineSegment(new Point(east, north), new Point(east, south)), Color.RED);
-//		Wall SOUTH = new Wall(new LineSegment(new Point(west, south), new Point(east, south)), Color.RED);
-//		Wall WEST = new Wall(new LineSegment(new Point(west, south), new Point(west, north)), Color.RED);
-//		
-//		space.add(NORTH);
-//		space.add(EAST);
-//		space.add(SOUTH);
-//		space.add(WEST);
-//		
-//		Wall small = new Wall(new LineSegment(new Point(340, -200), new Point(380, -200)), Color.GREEN);
-//		space.add(small);		
-//		
-//		Wall DIAG = new Wall(new LineSegment(new Point(west, south), new Point(east - 200, north - 200)), Color.RED);
-//		space.add(DIAG);
-//		
-//		Wall DIAG2 = new Wall(new LineSegment(new Point(west, north - 400), new Point(east - 200, south + 100)), Color.CYAN);
-//		space.add(DIAG2);
-//		
-//		Wall DIAG3 = new Wall(new LineSegment(new Point(west + 300, north - 400), new Point(east - 200, south + 100)), Color.CYAN);
-//		space.add(DIAG3);
-		
-		this.setVisible(true);
+		Thread spaceThread = new Thread(space);
+		spaceThread.setPriority(Thread.MAX_PRIORITY);
+		spaceThread.start();
 	}
 	
 	public static void main(String args[])
 	{
 		GUI visuals = new GUI();
-		visuals.init();
-		visuals.space.run();
+		visuals.run();
 	}
 	
 	private Point convertPoint(java.awt.Point p)
@@ -134,11 +79,11 @@ public class GUI extends JFrame implements MouseListener
 		return new Point(p.x + Global.WIDTH, Global.HEIGHT - p.y);
 	}
 	
+	//used to store previous click location
 	private Point temp;
 	
-	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
+	public void mouseClicked(MouseEvent e)
+	{
 		if(e.getButton() == MouseEvent.BUTTON3)
 		{
 			Ball ball = getNewBall();
@@ -160,15 +105,10 @@ public class GUI extends JFrame implements MouseListener
 		{
 			space.clear();
 		}
-//		System.out.println("yo" + ball.pos);
-//		System.out.println(ball);
-		
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-//		System.out.println("(" + Global.WIDTH + e.getPoint().x) + ", " + Global.getY(e.getPoint().y) + ")");
 		
 	}
 

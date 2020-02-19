@@ -3,8 +3,8 @@ package physicsengine.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import javax.swing.JPanel;
 
@@ -14,7 +14,7 @@ public class Display extends JPanel
 {
 	private static final long serialVersionUID = 387636754339140630L;
 	
-	private Queue<Object> renderQueue;
+	private volatile Collection<Object> renderQueue;
 	
 	public Display()
 	{
@@ -22,8 +22,9 @@ public class Display extends JPanel
 		renderQueue = new LinkedList<Object>();
 	}
 	
-	public void render(Collection<Object> toRender)
+	public synchronized void render(Collection<Object> toRender)
 	{
+		renderQueue.clear();
 		renderQueue.addAll(toRender);
 		repaint();
 	}
@@ -31,7 +32,8 @@ public class Display extends JPanel
 	public void paint(Graphics g)
 	{
 		super.paint(g);
-		while(renderQueue.isEmpty() == false)
-			renderQueue.poll().render(g);
+		Iterator<Object> itr = renderQueue.iterator();
+		while(itr.hasNext())
+			itr.next().render(g);
 	}
 }
