@@ -70,6 +70,7 @@ public class GUI extends JFrame implements MouseListener
 	
 	public static void main(String args[])
 	{
+		System.setProperty("sun.java2d.opengl", "true");
 		GUI visuals = new GUI();
 		visuals.run();
 	}

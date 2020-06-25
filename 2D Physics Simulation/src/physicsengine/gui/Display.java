@@ -14,7 +14,7 @@ public class Display extends JPanel
 {
 	private static final long serialVersionUID = 387636754339140630L;
 	
-	private volatile Collection<Object> renderQueue;
+	private Collection<Object> renderQueue;
 	
 	public Display()
 	{
@@ -24,8 +24,7 @@ public class Display extends JPanel
 	
 	public synchronized void render(Collection<Object> toRender)
 	{
-		renderQueue.clear();
-		renderQueue.addAll(toRender);
+		renderQueue = toRender;
 		repaint();
 	}
 	
